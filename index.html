@@ -158,6 +158,114 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Jmeter-分布式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/22/Jmeter-分布式/">Jmeter 分布式</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/22/Jmeter-分布式/" class="archive-article-date">
+  	<time datetime="2018-08-22T07:00:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>###我的分布式配置如下：</p>
+<ul>
+<li>master是我的mac电脑：使用GUI模式做调度机，也可以使用no-gui模式。</li>
+<li>slave有两台是另个服务器，这里虽然master（调度机）也可以作为slave（执行机），但是不建议这么做。</li>
+<li>三台机器都要有Jmeter，且版本要一致，否则可能出现脚本在不太版本运行报错的问题。<br><img src="https://upload-images.jianshu.io/upload_images/12341641-9edd73bed03dad0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/520" alt="image.png"></li>
+</ul>
+<h2 id="一、Jmeter分布式执行原理："><a href="#一、Jmeter分布式执行原理：" class="headerlink" title="一、Jmeter分布式执行原理："></a>一、Jmeter分布式执行原理：</h2><ol>
+<li>Jmeter分布式测试时，选择其中一台作为调度机(master)，其它机器做为执行机(slave)。</li>
+<li>执行时，master会把脚本发送到每台slave上，slave 拿到脚本后就开始执行，slave执行时不需要启动GUI，我理解它应该是通过命令行模式执行的。</li>
+<li><p>执行完成后，slave会把结果回传给master，master会收集所有slave的信息并汇总。<br>##二、执行机（slave）配置：</p>
+</li>
+<li><p>slave机上需要安装Jmeter，具体如何安装这里不详细介绍了。</p>
+</li>
+<li>添加环境变量：</li>
+<li>启动bin目录下的jmeter-server（windows上输入jmeter-server.bat ；mac和linux系统上输入./jmeter-server(或者sh jmeter-server)，linux上关闭窗口或者Ctrl+C会导致进程关闭，可以通过nohup ./jmeter-server.sh 来运行。)<br><img src="https://upload-images.jianshu.io/upload_images/12341641-fc1502d0433a3287.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/520" alt="image.png"></li>
+<li>IP就是slave机器IP，端口默认是1099，这里我自定义为5029，端口的自定义后面会讲。 </li>
+<li><p>多台slave的话，重复1~4步骤就好。</p>
+<h2 id="三、调度机（master）配置："><a href="#三、调度机（master）配置：" class="headerlink" title="三、调度机（master）配置："></a>三、调度机（master）配置：</h2></li>
+<li><p>进入bin目录，修改jmeter.properties文件中remote_hosts=XXX:5029,XXX:5029,….<br>多个slave用英文格式逗号隔开(ps: vi模式下shift+g调至至最后一行，更多操作可以百度）。<br><img src="https://upload-images.jianshu.io/upload_images/12341641-25cb5bf21044837e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/520" alt="image.png"></p>
+</li>
+<li>配置好后，在GUI模式下就可以看到我们第一张图片上的配置了。</li>
+<li><p>slave可以选择全部启动，也可以选择启动某个，或者某几个（在no-gui下可操作）。<br>##四、自定义端口</p>
+</li>
+<li><p>slave机的Jmeter的bin目录下，找到jmeter.properties文件，修改如下两个配置项，比如我这里修改为5029,（这里自定义，但不要与服务器已经开启的端口冲突）：<br><img src="https://upload-images.jianshu.io/upload_images/12341641-cb8a0ec1cb978909.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+</li>
+<li>slave机的端口改动了，需要在master上的jmeter.properties进行修改。</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">jmeter</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">压力测试</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式部署</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/22/Jmeter-分布式/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -320,6 +428,42 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">jmeter压力测试   jmeter分布式部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">jmeter压力测试、jmeter分布式部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">jmeter压力测试,jmeter分布式部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jmeter压力测试jmeter分布式部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">jmeter压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jmeter分布式部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jmeter</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">压力测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">分布式部署</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
